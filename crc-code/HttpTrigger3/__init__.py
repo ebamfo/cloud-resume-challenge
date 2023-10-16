@@ -17,7 +17,7 @@ my_entity = {
 def main(req: func.HttpRequest) -> func.HttpResponse:
         with TableClient.from_connection_string(conn_str=os.environ['CONNECTION_STR'], table_name="ViewsCounter") as table:
             
-            # Create a table in case it does not already exist
+            # Create a table incase it does not already exist
             try:
                 table.create_table()
             except HttpResponseError:
