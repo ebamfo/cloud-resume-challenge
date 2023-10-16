@@ -11,7 +11,7 @@ func.HttpResponse.charset = 'utf-8'
 my_entity = {
             "PartitionKey": "pk-01",
             "RowKey": "rk-01",
-            "CurrentCounter":0
+            "CurrentCounter": 0
         }
     
 def main(req: func.HttpRequest) -> func.HttpResponse:
