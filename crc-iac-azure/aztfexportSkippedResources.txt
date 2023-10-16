@@ -1,0 +1,15 @@
+Following resources are marked to be skipped:
+
+- /subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Cdn/profiles/resume/endpoints/ebamfo9/origins/ebamfo9-z33-web-core-windows-net
+- /subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Network/dnszones/ebamforesume.cloud/SOA/@
+- /subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Storage/storageAccounts/cloudresumechallenga98f/blobServices/default
+- /subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Storage/storageAccounts/cloudresumechallenga98f/fileServices/default
+- /subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Storage/storageAccounts/cloudresumechallenga98f/queueServices/default
+- /subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Storage/storageAccounts/cloudresumechallenga98f/tableServices/default
+- /subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Storage/storageAccounts/ebamfo9/blobServices/default
+- /subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Storage/storageAccounts/ebamfo9/fileServices/default
+- /subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Storage/storageAccounts/ebamfo9/queueServices/default
+- /subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Storage/storageAccounts/ebamfo9/tableServices/default
+- /subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Web/sites/func-pers-prod-01/basicPublishingCredentialsPolicies/ftp
+- /subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Web/sites/func-pers-prod-01/basicPublishingCredentialsPolicies/scm
+- /subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Web/sites/func-pers-prod-01/config/web
