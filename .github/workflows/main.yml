@@ -22,12 +22,13 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS_CRC }}
           ##Directory with terraform infrastructure
-      - name: changing directory to crc-iac-azure-test
-        run:  cd crc-iac-azure-test
       - name: Installing Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_wrapper: TRUE
+
+      - name: changing directory to crc-iac-azure-test
+        run:  cd crc-iac-azure-test
 
       # Checks that all Terraform configuration files adhere to a canonical format
       - name: Terraform Format
