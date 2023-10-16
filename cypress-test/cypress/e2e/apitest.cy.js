@@ -32,7 +32,7 @@ describe('Testing API calls', () => {
     //Checking whether CurrentCounter(Count of site visits/api POST calls) table and...
     //...value is not null and greater than 0
     expect(post_request.CurrentCounter).to.not.be.null
-    expect(post_request.CurrentCounter).to.be.at.least(0)
+    expect(post_request.CurrentCounter).to.be.at.least(1)
 
     //Check to see that POST requests increate value in Database by +1
     cy

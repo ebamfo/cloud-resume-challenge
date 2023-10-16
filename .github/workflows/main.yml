@@ -27,7 +27,7 @@ jobs:
         with:
           terraform_wrapper: TRUE
 
-      - name: changing directory to crc-iac-azure-test
+      - name: Changing directory to crc-iac-azure-test
         run:  cd crc-iac-azure-test
 
       # Checks that all Terraform configuration files adhere to a canonical format
