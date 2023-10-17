@@ -116,7 +116,7 @@ jobs:
           app-name: 'func-pers-prod-01'
           slot-name: 'production'
           package: './crc_code_test.zip'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_be9e675da43740ed8389608a5ff14ce3 }}
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
           scm-do-build-during-deployment: true
           enable-oryx-build: true
         
@@ -124,6 +124,8 @@ jobs:
         with:
           inlineScript: |
             az group delete --name $RG_NAME -y
+        if: always()
+        
     
         
           
