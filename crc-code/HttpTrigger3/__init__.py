@@ -21,13 +21,13 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             try:
                 table.create_table()
             except HttpResponseError:
-                pass
+                 print("Table already exists")
             
             # Create entity incase it does not exist ie table rows and default values
             try:
                 table.create_entity(entity=my_entity)
             except ResourceExistsError:
-                pass
+                print("Entity already exists")
 
             #Get Entity
             updated_entity = table.get_entity(partition_key="pk-01", row_key="rk-01")

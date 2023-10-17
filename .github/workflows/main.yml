@@ -9,6 +9,10 @@ on:
       - '!crc-iac-azure/**'
       - '!crc-iac-azure-test/**'
 
+env:
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
+  PYTHON_VERSION: '3.9' # set this to the python version to use (supports 3.6, 3.7, 3.8)
+
 jobs:
   create-test-infra:
     runs-on: ubuntu-latest
@@ -28,22 +32,20 @@ jobs:
           terraform_wrapper: TRUE
 
       - name: Changing directory to crc-iac-azure-test
-        run:  cd crc-iac-azure-test
+        run:  cd crc-iac-azure-test 
 
-      # Checks that all Terraform configuration files adhere to a canonical format
-      - name: Terraform Format
-        run: terraform fmt -check  
-
+        ##Intialise, format code and deploy terraform infra
       - name: Deploying Terraform Infrastructure
         run: |
               terraform init
+              terraform fmt
               terraform apply -auto-approve
       - name: Getting Resource Group Name
         id: rg_name
         run: echo "RGNAME=$( terraform output rgname )" >> "$GITHUB_OUTPUT"
       - name: Getting Function App Name
         id: app_name
-        run: echo "APP_NAME=$(v terraform output appname )" >> "$GITHUB_OUTPUT"
+        run: echo "APP_NAME=$( terraform output appname )" >> "$GITHUB_OUTPUT"
       - name: Getting API for updating database
         id: api_endpoint
         run: echo "API_ENDPOINT=$( terraform output api-endpoint )" >> "$GITHUB_OUTPUT"
@@ -79,7 +81,6 @@ jobs:
   cypress-api-endpoint-test:
     needs: deploy-azure-api-merge-request
     runs-on: ubuntu-latest
-    
     steps:
       - uses: actions/checkout@v3
 
@@ -96,16 +97,36 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     needs: cypress-api-endpoint-test
-    
+    env:
+      RG_NAME: ${{ needs.create-test-infra.outputs.rg_name }}
     steps:
       - uses: actions/checkout@v3
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS_CRC }}
-      - name: Deleting Resource group after merge
-        env:
-          RG_NAME: ${{ needs.create-test-infra.outputs.rg_name }}
-        run: az group delete --name $RG_NAME -y
+      - name: changing directory to crc-code
+        run: cd crc-code
+      - name: installing zip and zipping function
+        run: |
+              apt-install zip -y
+              zip -rv crc_code_test.zip .
+
+      - name: 'Deploy to Azure Functions'
+        uses: Azure/functions-action@v1
+        id: deploy-to-function
+        with:
+          app-name: 'func-pers-prod-01'
+          slot-name: 'production'
+          package: './crc_code_test.zip'
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_be9e675da43740ed8389608a5ff14ce3 }}
+          scm-do-build-during-deployment: true
+          enable-oryx-build: true
+        
+      - uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az group delete --name $RG_NAME -y
+    
         
           
             
