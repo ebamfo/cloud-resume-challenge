@@ -29,14 +29,12 @@ jobs:
       - name: Installing Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_wrapper: TRUE
-
-      - name: Changing directory to crc-iac-azure-test
-        run:  cd crc-iac-azure-test 
+          terraform_wrapper: TRUE 
 
         ##Intialise, format code and deploy terraform infra
       - name: Deploying Terraform Infrastructure
         run: |
+              cd ./crc-iac-azure-test 
               terraform init
               terraform fmt
               terraform apply -auto-approve
