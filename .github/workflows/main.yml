@@ -43,10 +43,16 @@ jobs:
         run: RGNAME=$(terraform output rgname) >> $GITHUB_OUTPUT
       - name: Getting Function App Name
         id: app_name
-        run: echo "APP_NAME=$(terraform output appname)" >> "$GITHUB_OUTPUT"
+        run: APP_NAME=$(terraform output appname) >> $GITHUB_OUTPUT
       - name: Getting API for updating database
         id: api_endpoint
         run: API_ENDPOINT=$(terraform output api-endpoint) >> $GITHUB_OUTPUT
+
+        ##Delete Infrastructure on failure
+      - name: Delete terraform infra on failure
+        run: terraform destroy -auto-approve
+        if: ${{ failure() }}
+        
 
 
   deploy-azure-api-merge-request:
@@ -75,12 +81,23 @@ jobs:
         with:
           inlineScript: |
             az webapp deployment source config-zip --resource-group $RG_NAME --name $APP_NAME --src crc_code_test.zip
+      - name: Deleting infrastructure on failure
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az group delete --name $RG_NAME -y
+        if: ${{ failure() }}
   
   cypress-api-endpoint-test:
     needs: deploy-azure-api-merge-request
     runs-on: ubuntu-latest
+    env:
+      RG_NAME: ${{ needs.create-test-infra.outputs.rg_name }}
     steps:
       - uses: actions/checkout@v3
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_CRC }}
 
       - name: Changing directory to cypress test directory
         run: cd cypress-test
@@ -90,6 +107,12 @@ jobs:
           spec: cypress/e2e/apitest.cy.js
         env:
           CYPRESS_API_ENDPOINT: ${{ needs.create-test-infra.outputs.api_endpoint }}
+      - name: Deleting infrastructure on failure
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az group delete --name $RG_NAME -y
+        if: ${{ failure() }}
 
   if_merged:
     if: github.event.pull_request.merged == true
@@ -124,7 +147,7 @@ jobs:
         with:
           inlineScript: |
             az group delete --name $RG_NAME -y
-        if: always()
+        if: ${{ always() }}
         
     
         
