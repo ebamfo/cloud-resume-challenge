@@ -20,6 +20,9 @@ jobs:
       rg_name: ${{ steps.rg_name.outputs.RGNAME }}
       app_name: ${{ steps.app_name.outputs.APP_NAME }}
       api_endpoint: ${{ steps.api_endpoint.outputs.API_ENDPOINT }}
+    defaults:
+      run:
+        working-directory: crc-iac-azure-test 
     steps:
         
       - uses: actions/checkout@v3
@@ -33,9 +36,8 @@ jobs:
           terraform_wrapper: true 
 
         ##Intialise, format code and deploy terraform infra
-      - name: Deploying Terraform Infrastructure
+      - name: Deploying Terraform Infrastructure & get output
         run: |
-              cd ./crc-iac-azure-test 
               terraform init -upgrade
               terraform fmt
               terraform apply -auto-approve
@@ -50,7 +52,6 @@ jobs:
         ##Delete Infrastructure on failure
       - name: Delete terraform infra on failure
         run: |
-             cd ./crc-iac-azure-test
              terraform destroy -auto-approve
         if: ${{ failure() }}
         
@@ -59,18 +60,15 @@ jobs:
   deploy-azure-api-merge-request:
     needs: create-test-infra
     runs-on: ubuntu-latest
-
-    ##If env does not work here, move it to just before the azure command
-   
+    defaults:
+      run:
+        working-directory: crc-code
     steps:
       - uses: actions/checkout@v3
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS_CRC }}
       
-        #Directory with code to be tested
-      - name: changing directory to crc-code
-        run: cd crc-code
       - name: installing zip and zipping function
         run: |
               apt-get install zip -y
@@ -96,14 +94,14 @@ jobs:
   cypress-api-endpoint-test:
     needs: deploy-azure-api-merge-request
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cypress-test
     steps:
       - uses: actions/checkout@v3
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS_CRC }}
-
-      - name: Changing directory to cypress test directory
-        run: cd cypress-test
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
@@ -123,13 +121,15 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     needs: cypress-api-endpoint-test
+    defaults:
+      run:
+        working-directory: crc-code
     steps:
       - uses: actions/checkout@v3
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS_CRC }}
-      - name: changing directory to crc-code
-        run: cd crc-code
+
       - name: installing zip and zipping function
         run: |
               apt-install zip -y
