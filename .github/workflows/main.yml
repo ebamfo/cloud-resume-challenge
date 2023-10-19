@@ -41,13 +41,9 @@ jobs:
               terraform init -upgrade
               terraform fmt
               terraform apply -auto-approve
-              terraform refresh
-              echo "RGNAME=$(terraform output rgname)" >> $GITHUB_OUTPUT
-              echo $RGNAME
-              echo "APP_NAME=$(terraform output appname)" >> $GITHUB_OUTPUT
-              echo $APP_NAME
-              echo "API_ENDPOINT=$(terraform output api-endpoint)" >> $GITHUB_OUTPUT
-              echo $APP_NAME
+              RGNAME=$(terraform output rgname) >> $GITHUB_OUTPUT
+              APP_NAME=$(terraform output appname) >> $GITHUB_OUTPUT
+              API_ENDPOINT=$(terraform output api-endpoint) >> $GITHUB_OUTPUT
 
         ##Delete Infrastructure on failure
       - name: Delete terraform infra on failure
