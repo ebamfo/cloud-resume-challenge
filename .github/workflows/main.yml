@@ -67,8 +67,9 @@ jobs:
       
       - name: installing zip and zipping function
         run: |
-              apt-get install zip -y
+              sudo apt-get install zip -y
               zip -rv crc_code_test.zip .  
+
       - name: deploy zipped file to azure
         uses: azure/CLI@v1
         env:
@@ -77,6 +78,7 @@ jobs:
         with:
           inlineScript: |
             az webapp deployment source config-zip --resource-group ${{ env.RG_NAME }} --name ${{ env.APP_NAME }} --src crc_code_test.zip
+
       - name: Deleting infrastructure on failure
         uses: azure/CLI@v1
         env:
@@ -98,12 +100,14 @@ jobs:
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS_CRC }}
+
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
           spec: cypress/e2e/apitest.cy.js
         env:
           CYPRESS_API_ENDPOINT: ${{ needs.create-test-infra.outputs.api_endpoint }}
+
       - name: Deleting infrastructure on failure
         uses: azure/CLI@v1
         env:
@@ -122,6 +126,7 @@ jobs:
         working-directory: crc-code
     steps:
       - uses: actions/checkout@v3
+      
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS_CRC }}
