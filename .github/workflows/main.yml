@@ -21,6 +21,7 @@ jobs:
       app_name: ${{ steps.app_name.outputs.APP_NAME }}
       api_endpoint: ${{ steps.api_endpoint.outputs.API_ENDPOINT }}
     steps:
+        
       - uses: actions/checkout@v3
       - uses: azure/login@v1
         with:
@@ -38,25 +39,19 @@ jobs:
               terraform init -upgrade
               terraform fmt
               terraform apply -auto-approve
-      - name: Getting Resource Group Name
-        id: rg_name
-        run: |
-              RGNAME=$(terraform output rgname) >> $GITHUB_OUTPUT
+              terraform refresh
+              echo "RGNAME=$(terraform output rgname)" >> $GITHUB_OUTPUT
               echo $RGNAME
-      - name: Getting Function App Name
-        id: app_name
-        run: |
-             echo "APP_NAME=$(terraform output appname)" >> $GITHUB_OUTPUT
-             echo $APP_NAME
-      - name: Getting API for updating database
-        id: api_endpoint
-        run: |
-           API_ENDPOINT=$(terraform output api-endpoint) >> $GITHUB_OUTPUT
-           echo $APP_NAME
+              echo "APP_NAME=$(terraform output appname)" >> $GITHUB_OUTPUT
+              echo $APP_NAME
+              echo "API_ENDPOINT=$(terraform output api-endpoint)" >> $GITHUB_OUTPUT
+              echo $APP_NAME
 
         ##Delete Infrastructure on failure
       - name: Delete terraform infra on failure
-        run: terraform destroy -auto-approve
+        run: |
+             cd ./crc-iac-azure-test
+             terraform destroy -auto-approve
         if: ${{ failure() }}
         
 
@@ -73,7 +68,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS_CRC }}
       
-          #Directory with code to be tested
+        #Directory with code to be tested
       - name: changing directory to crc-code
         run: cd crc-code
       - name: installing zip and zipping function
