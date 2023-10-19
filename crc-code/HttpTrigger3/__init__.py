@@ -23,7 +23,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             except HttpResponseError:
                  print("Table already exists")
             
-            # Create entity in case it does not exist ie table rows and default values
+            # Create entity in case it does not exist ie table rows and default values #1
             try:
                 table.create_entity(entity=my_entity)
             except ResourceExistsError:
