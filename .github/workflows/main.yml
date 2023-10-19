@@ -22,7 +22,7 @@ jobs:
       api_endpoint: ${{ steps.api_endpoint.outputs.API_ENDPOINT }}
     defaults:
       run:
-        working-directory: crc-iac-azure-test 
+        working-directory: ./crc-iac-azure-test/ 
     steps:
         
       - uses: actions/checkout@v3
@@ -41,9 +41,9 @@ jobs:
               terraform init -upgrade
               terraform fmt
               terraform apply -auto-approve
-              RGNAME=$(terraform output rgname) >> $GITHUB_OUTPUT
-              APP_NAME=$(terraform output appname) >> $GITHUB_OUTPUT
-              API_ENDPOINT=$(terraform output api-endpoint) >> $GITHUB_OUTPUT
+              echo "RGNAME=$(terraform output rgname)" >> $GITHUB_OUTPUT
+              echo "APP_NAME=$(terraform output appname)" >> $GITHUB_OUTPUT
+              echo "API_ENDPOINT=$(terraform output api-endpoint)" >> $GITHUB_OUTPUT
 
         ##Delete Infrastructure on failure
       - name: Delete terraform infra on failure
@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: crc-code
+        working-directory: ./crc-code/
     steps:
       - uses: actions/checkout@v3
       - uses: azure/login@v1
@@ -94,7 +94,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: cypress-test
+        working-directory: ./cypress-test/
     steps:
       - uses: actions/checkout@v3
       - uses: azure/login@v1
@@ -123,7 +123,7 @@ jobs:
     needs: cypress-api-endpoint-test
     defaults:
       run:
-        working-directory: crc-code
+        working-directory: ./crc-code/
     steps:
       - uses: actions/checkout@v3
       
