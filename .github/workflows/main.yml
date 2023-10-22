@@ -42,32 +42,57 @@ jobs:
               terraform fmt
               terraform apply -auto-approve
               RGNAME=$(terraform output rgname) >> $GITHUB_OUTPUT
-              RGNAME=$(terraform output rgname) >> $GITHUB_ENV
               APP_NAME=$(terraform output appname) >> $GITHUB_OUTPUT
-              APP_NAME=$(terraform output appname) >> $GITHUB_ENV
               API_ENDPOINT=$(terraform output api-endpoint) >> $GITHUB_OUTPUT
               echo $RGNAME $APP_NAME $API_ENDPOINT
-              
-              cd ../crc-code
-              sudo apt-get install zip -y
-              zip -rv crc_code_test.zip .
+      
 
-      - name: deploy zipped file to azure
-        uses: azure/CLI@v1
-        with:
-          inlineScript: |
-            az webapp deployment source config-zip --resource-group $RG_NAME --name $APP_NAME --src crc_code_test.zip
         ##Delete Infrastructure on failure
-
       - name: Delete terraform infra on failure
-        working-directory: ./crc-iac-azure-test/ 
         run: |
              terraform destroy -auto-approve
         if: ${{ failure() }}
         
 
-  cypress-api-endpoint-test:
+
+  deploy-azure-api-merge-request:
     needs: create-test-infra
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./crc-code/
+    steps:
+      - uses: actions/checkout@v3
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_CRC }}
+      
+      - name: installing zip and zipping function
+        run: |
+              sudo apt-get install zip -y
+              zip -rv crc_code_test.zip .  
+
+      - name: deploy zipped file to azure
+        uses: azure/CLI@v1
+        env:
+          RG_NAME: ${{ needs.create-test-infra.outputs.rg_name }}
+          APP_NAME: ${{ needs.create-test-infra.outputs.app_name }}
+        with:
+          inlineScript: |
+            az webapp deployment source config-zip --resource-group ${{ env.RG_NAME }} --name ${{ env.APP_NAME }} --src crc_code_test.zip
+
+      - name: Deleting infrastructure on failure
+        uses: azure/CLI@v1
+        env:
+          RG_NAME: ${{ needs.create-test-infra.outputs.rg_name }}
+        with:
+          inlineScript: |
+            echo ${{ env.RG_NAME }}
+            az group delete -n ${{ env.RG_NAME }} -y
+        if: ${{ failure() }}
+  
+  cypress-api-endpoint-test:
+    needs: deploy-azure-api-merge-request
     runs-on: ubuntu-latest
     defaults:
       run:
