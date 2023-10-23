@@ -74,8 +74,10 @@ jobs:
       - name: installing zip and zipping function
         run: |
               sudo apt-get install zip -y
-              zip -rv crc_code_test.zip .  
-              echo $RG_NAME $APP_NAME
+              zip -rv crc_code_test.zip . 
+              
+      - name: echo test 
+        run:  echo $RG_NAME $APP_NAME
 
       - name: deploy zipped file to azure
         uses: azure/CLI@v1
