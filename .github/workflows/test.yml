@@ -19,10 +19,11 @@ jobs:
         runs-on: ubuntu-latest
         needs: store-vars
         env:
-            out_var: ${{ needs.store_vars.outputs.store_var }}
+            out_var: ${{ needs.store-vars.outputs.store_var }}
         steps:
             - uses: actions/checkout@v3
             - name: Output vars from different job
               run: |
-                   echo ${{ needs.store_vars.outputs.store_var }}
+                   echo "I am a boy"
+                   echo ${{ needs.store-vars.outputs.store_var }}
 
