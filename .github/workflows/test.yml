@@ -16,7 +16,7 @@ jobs:
             
             
     echo-outputs:
-        runs-on: ubuntu3-latest
+        runs-on: ubuntu-latest
         needs: store-vars
         env:
             out_var: ${{ needs.store_vars.outputs.store_var }}
