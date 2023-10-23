@@ -1,0 +1,27 @@
+name: Output test
+on:
+    workflow_dispatch
+
+jobs:
+    store-vars:
+        runs-on: ubuntu-latest
+        outputs:
+            store_var: ${{ steps.output-vars-id.outputs.MY_VAR }}
+        steps:
+            - uses: actions/checkout@v3
+            - name: Store Vars
+              id: output-vars-id
+              run:
+                echo "MY_VAR=ebenezer" >> $GITHUB_OUTPUT
+            
+            
+    echo-outputs:
+        runs-on: ubuntu3-latest
+        env:
+            out_var: ${{ needs.store_vars.outputs.store_var }}
+        steps:
+            - uses: actions/checkout@v3
+            - name: Output vars from different job
+              run: |
+                   echo $out_var
+
