@@ -11,12 +11,13 @@ jobs:
             - uses: actions/checkout@v3
             - name: Store Vars
               id: output-vars-id
-              run:
+              run: |
                 echo "MY_VAR=ebenezer" >> $GITHUB_OUTPUT
             
             
     echo-outputs:
         runs-on: ubuntu3-latest
+        needs: store-vars
         env:
             out_var: ${{ needs.store_vars.outputs.store_var }}
         steps:
