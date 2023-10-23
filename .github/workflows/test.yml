@@ -25,5 +25,5 @@ jobs:
             - name: Output vars from different job
               run: |
                    echo "I am a boy"
-                   echo ${{ needs.store-vars.outputs.store_var }}
+                   echo $out_var
 
