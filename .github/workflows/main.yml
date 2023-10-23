@@ -40,7 +40,6 @@ jobs:
         id: terraform-output
         run: |
               terraform init -upgrade
-              terraform fmt
               terraform apply -auto-approve
               RGNAME=$(terraform output rgname) >> $GITHUB_OUTPUT
               APP_NAME=$(terraform output appname) >> $GITHUB_OUTPUT

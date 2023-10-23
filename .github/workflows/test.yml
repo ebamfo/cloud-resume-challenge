@@ -12,7 +12,7 @@ jobs:
             - name: Store Vars
               id: output-vars-id
               run: |
-                echo "MY_VAR=ebenezer" >> $GITHUB_OUTPUT
+                echo "MY_VAR=$(whoami)" >> $GITHUB_OUTPUT
             
             
     echo-outputs:
