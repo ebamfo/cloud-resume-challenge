@@ -37,17 +37,16 @@ jobs:
 
         ##Intialise, format code and deploy terraform infra
       - name: Deploying Terraform Infrastructure & get output
-        id: terraform-output
         run: |
               terraform init -upgrade
-              terraform fmt
               terraform apply -auto-approve
-              RGNAME=$(terraform output rgname) >> $GITHUB_OUTPUT
-              APP_NAME=$(terraform output appname) >> $GITHUB_OUTPUT
-              API_ENDPOINT=$(terraform output api-endpoint) >> $GITHUB_OUTPUT
+      - name: Terraform Outputs
+        id: terraform-output
+        run: |
+         echo "RGNAME=$(terraform output rgname)" >> $GITHUB_OUTPUT
+         echo "APP_NAME=$(terraform output appname)" >> $GITHUB_OUTPUT
+         echo "API_ENDPOINT=$(terraform output api-endpoint)" >> $GITHUB_OUTPUT
              
-      
-
         ##Delete Infrastructure on failure
       - name: Delete terraform infra on failure
         run: |
@@ -70,6 +69,10 @@ jobs:
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS_CRC }}
+      - name: echo vars
+        run: |
+         echo $RG_NAME
+         echo $APP_NAME
       
       - name: installing zip and zipping function
         run: |
