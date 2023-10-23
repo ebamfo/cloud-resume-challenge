@@ -45,7 +45,7 @@ jobs:
               RGNAME=$(terraform output rgname) >> $GITHUB_OUTPUT
               APP_NAME=$(terraform output appname) >> $GITHUB_OUTPUT
               API_ENDPOINT=$(terraform output api-endpoint) >> $GITHUB_OUTPUT
-              echo $RGNAME $APP_NAME $API_ENDPOINT
+             
       
 
         ##Delete Infrastructure on failure
@@ -75,6 +75,7 @@ jobs:
         run: |
               sudo apt-get install zip -y
               zip -rv crc_code_test.zip .  
+              echo $RG_NAME $APP_NAME
 
       - name: deploy zipped file to azure
         uses: azure/CLI@v1
