@@ -116,9 +116,11 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
+          project: ./cypress-test
           spec: cypress/e2e/apitest.cy.js
         env:
           CYPRESS_API_ENDPOINT: ${{ needs.create-test-infra.outputs.api_endpoint }}
+        
 
       - name: Deleting infrastructure on failure
         uses: azure/CLI@v1
