@@ -21,5 +21,5 @@ output "api-endpoint" {
 output "funcapp-publish-profile" {
   value= azurerm_linux_function_app.funcapp-crc-test-01.site_credential
   description = "Azure Function App publishing profile"
-
+  sensitive = true
 }
