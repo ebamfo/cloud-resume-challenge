@@ -116,7 +116,6 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          project: ./cypress-test/
           spec: ./cypress/e2e/apitest.cy.js
           working-directory: ./cypress-test
         env:
