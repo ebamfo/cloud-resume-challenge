@@ -40,8 +40,7 @@ jobs:
       - name: Terraform apply
         run: terraform apply -auto-approve
         working-directory: ./crc-iac-azure-test/
-        
-          
+           
       - name: Terraform Outputs
         id: terraform-output
         run: |
@@ -78,9 +77,7 @@ jobs:
         run: |
               sudo apt-get install zip -y
               zip -rv crc_code_test.zip . 
-              
-      - name: echo test 
-        run:  echo $RG_NAME $APP_NAME
+        working-directory: ./crc-code
 
       - name: deploy zipped file to azure
         uses: azure/CLI@v1
@@ -99,6 +96,10 @@ jobs:
           inlineScript: |
             az group delete -n $RG_NAME -y
         if: ${{ failure() }}
+      - name: logout
+        run: |
+            az logout
+        if: always()
   
   cypress-api-endpoint-test:
     needs: [deploy-azure-api-merge-request, create-test-infra]
@@ -132,6 +133,9 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     needs: [cypress-api-endpoint-test, create-test-infra]
+    defaults:
+      run:
+        working-directory: ./crc-code
         
     steps:
       - uses: actions/checkout@v3
@@ -144,7 +148,6 @@ jobs:
         run: |
               apt-install zip -y
               zip -rv crc_code_test.zip .
-        working-directory: ./crc-code/
 
       - name: 'Deploy to Azure Functions'
         uses: Azure/functions-action@v1
