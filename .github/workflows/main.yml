@@ -121,16 +121,14 @@ jobs:
         env:
           CYPRESS_API_ENDPOINT: ${{ needs.create-test-infra.outputs.api_endpoint }}
         
-        
-        
-      - name: Deleting infrastructure on failure
+      - name: Deleting infrastructure on failure  ###Change after testing code
         uses: azure/CLI@v1
         env:
           RG_NAME: ${{ needs.create-test-infra.outputs.rg_name }}
         with:
           inlineScript: |
             az group delete --name ${{ env.RG_NAME }} -y
-        if: ${{ failure() }}
+        if: ${{ success() }}
 
   if_merged:
     if: github.event.pull_request.merged == true
