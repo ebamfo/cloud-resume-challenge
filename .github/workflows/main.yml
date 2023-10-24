@@ -117,9 +117,8 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           project: ./cypress-test/
-          spec: ./cypress-test/cypress/e2e/apitest.cy.js
-          build: npm run build
-          start: npm start
+          spec: ./cypress/e2e/apitest.cy.js
+          working-directory: ./cypress-test
         env:
           CYPRESS_API_ENDPOINT: ${{ needs.create-test-infra.outputs.api_endpoint }}
         
