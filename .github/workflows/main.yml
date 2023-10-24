@@ -20,9 +20,6 @@ jobs:
       rg_name: ${{ steps.terraform-output.outputs.RGNAME }}
       app_name: ${{ steps.terraform-output.outputs.APP_NAME }}
       api_endpoint: ${{ steps.terraform-output.outputs.API_ENDPOINT }}
-    defaults:
-      run:
-        working-directory: ./crc-iac-azure-test/ 
     steps:
         
       - uses: actions/checkout@v3
@@ -33,24 +30,30 @@ jobs:
       - name: Installing Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_wrapper: true 
+          terraform_wrapper: false 
 
         ##Intialise, format code and deploy terraform infra
-      - name: Deploying Terraform Infrastructure & get output
-        run: |
-              terraform init -upgrade
-              terraform apply -auto-approve
+      - name: Terraform init
+        run: terraform init -upgrade
+        working-directory: ./crc-iac-azure-test/
+
+      - name: Terraform apply
+        run: terraform apply -auto-approve
+        working-directory: ./crc-iac-azure-test/
+        
+          
       - name: Terraform Outputs
         id: terraform-output
         run: |
-         echo "RGNAME=$(terraform output rgname)" >> $GITHUB_OUTPUT
-         echo "APP_NAME=$(terraform output appname)" >> $GITHUB_OUTPUT
-         echo "API_ENDPOINT=$(terraform output api-endpoint)" >> $GITHUB_OUTPUT
+         echo "RGNAME=$(terraform output -raw rgname)" >> $GITHUB_OUTPUT
+         echo "APP_NAME=$(terraform output -raw appname)" >> $GITHUB_OUTPUT
+         echo "API_ENDPOINT=$(terraform output -raw api-endpoint)" >> $GITHUB_OUTPUT
              
         ##Delete Infrastructure on failure
       - name: Delete terraform infra on failure
         run: |
              terraform destroy -auto-approve
+        working-directory: ./crc-iac-azure-test/
         if: ${{ failure() }}
         
 
@@ -69,10 +72,6 @@ jobs:
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS_CRC }}
-      - name: echo vars
-        run: |
-         echo $RG_NAME
-         echo $APP_NAME
       
       - name: installing zip and zipping function
         run: |
@@ -89,7 +88,7 @@ jobs:
           APP_NAME: ${{ needs.create-test-infra.outputs.app_name }}
         with:
           inlineScript: |
-            az webapp deployment source config-zip --resource-group ${{ env.RG_NAME }} --name ${{ env.APP_NAME }} --src crc_code_test.zip
+            az webapp deployment source config-zip --resource-group $RG_NAME --name $APP_NAME --src crc_code_test.zip
 
       - name: Deleting infrastructure on failure
         uses: azure/CLI@v1
@@ -97,11 +96,11 @@ jobs:
           RG_NAME: ${{ needs.create-test-infra.outputs.rg_name }}
         with:
           inlineScript: |
-            az group delete -n $(RG_NAME) -y
+            az group delete -n $RG_NAME -y
         if: ${{ failure() }}
   
   cypress-api-endpoint-test:
-    needs: deploy-azure-api-merge-request
+    needs: [deploy-azure-api-merge-request, create-test-infra]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -131,10 +130,8 @@ jobs:
   if_merged:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    needs: cypress-api-endpoint-test
-    defaults:
-      run:
-        working-directory: ./crc-code/
+    needs: [cypress-api-endpoint-test, create-test-infra]
+        
     steps:
       - uses: actions/checkout@v3
       
@@ -146,6 +143,7 @@ jobs:
         run: |
               apt-install zip -y
               zip -rv crc_code_test.zip .
+        working-directory: ./crc-code/
 
       - name: 'Deploy to Azure Functions'
         uses: Azure/functions-action@v1
