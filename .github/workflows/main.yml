@@ -48,6 +48,7 @@ jobs:
          echo "RGNAME=$(terraform output -raw rgname)" >> $GITHUB_OUTPUT
          echo "APP_NAME=$(terraform output -raw appname)" >> $GITHUB_OUTPUT
          echo "API_ENDPOINT=$(terraform output -raw api-endpoint)" >> $GITHUB_OUTPUT
+        working-directory: ./crc-iac-azure-test/
              
         ##Delete Infrastructure on failure
       - name: Delete terraform infra on failure
