@@ -76,6 +76,7 @@ jobs:
       - name: installing zip and zipping function
         run: |
               sudo apt-get install zip -y
+              rm -rf .venv .vscode
               zip -rv crc_code_test.zip . 
         working-directory: ./crc-code
 
@@ -86,7 +87,13 @@ jobs:
           APP_NAME: ${{ needs.create-test-infra.outputs.app_name }}
         with:
           inlineScript: |
-            az webapp deployment source config-zip --resource-group $RG_NAME --name $APP_NAME --src $GITHUB_WORKSPACE/crc-code/crc_code_test.zip
+             az storage blob upload \
+             --account-name $RG_NAME \
+             --container-name strg-cont01 \
+             --name crc_code_test \
+             --file $GITHUB_WORKSPACE/crc-code/crc_code_test.zip \
+             --auth-mode login
+
 
       - name: Deleting infrastructure on failure
         uses: azure/CLI@v1
@@ -128,7 +135,7 @@ jobs:
         with:
           inlineScript: |
             az group delete --name ${{ env.RG_NAME }} -y
-        if: ${{ success() }}
+        if: ${{ failure() }}
 
   if_merged:
     if: github.event.pull_request.merged == true
@@ -148,6 +155,7 @@ jobs:
       - name: installing zip and zipping function
         run: |
               apt-install zip -y
+              rm -rf .venv .vscode
               zip -rv crc_code_test.zip .
 
       - name: 'Deploy to Azure Functions'

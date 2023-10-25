@@ -79,6 +79,12 @@ resource "azurerm_storage_account" "strg-crc-test" {
   }
 }
 
+resource "azurerm_storage_container" "strg-crc-code" {
+  name = "strg-cont01"
+  storage_account_name = azurerm_storage_account.strg-crc-test.name
+  container_access_type = "container"
+}
+
 ##FUNCTION APP SECTION##
 
 resource "azurerm_service_plan" "serv_plan-crc-test-01" {
@@ -103,7 +109,7 @@ resource "azurerm_linux_function_app" "funcapp-crc-test-01" {
 
   app_settings = {
     CosmosDBConnectionString1 = local.cosmosdb_connection_strings[0]
-    WEBSITE_RUN_FROM_PACKAGE  = 1
+    WEBSITE_RUN_FROM_PACKAGE  = local.package_url
   }
 
   site_config {
@@ -154,6 +160,7 @@ resource "azurerm_application_insights" "application_insights" {
 
 locals {
   cosmosdb_connection_strings = azurerm_cosmosdb_account.db-acc.connection_strings
+  package_url = "${azurerm_storage_account.strg-crc-test.primary_blob_endpoint}${azurerm_storage_container.strg-crc-code}/crc_code_test"
 }
 
 
