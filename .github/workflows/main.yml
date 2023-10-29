@@ -90,7 +90,7 @@ jobs:
           STRG_ACC_NAME: ${{ needs.create-test-infra.outputs.strg_acc_name }}
         with:
           inlineScript: |
-             az storage blob upload --account-name $STRG_ACC_NAME --container-name strg-cont01 --name crc_code_test.zip --file $GITHUB_WORKSPACE/crc-code/crc_code_test.zip --auth-mode login
+             az storage blob upload --account-name $STRG_ACC_NAME --container-name strg-cont01 --name crc_code_test.zip --file $GITHUB_WORKSPACE/crc-code/crc_code_test.zip --auth-mode key
 
 
       - name: Deleting infrastructure on failure
