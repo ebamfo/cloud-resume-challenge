@@ -20,6 +20,7 @@ jobs:
       rg_name: ${{ steps.terraform-output.outputs.RGNAME }}
       app_name: ${{ steps.terraform-output.outputs.APP_NAME }}
       api_endpoint: ${{ steps.terraform-output.outputs.API_ENDPOINT }}
+      strg_acc_name: ${{ steps.terraform-output.outputs.STRG_ACC_NAME }}
     steps:
         
       - uses: actions/checkout@v3
@@ -47,6 +48,7 @@ jobs:
          echo "RGNAME=$(terraform output -raw rgname)" >> $GITHUB_OUTPUT
          echo "APP_NAME=$(terraform output -raw appname)" >> $GITHUB_OUTPUT
          echo "API_ENDPOINT=$(terraform output -raw api-endpoint)" >> $GITHUB_OUTPUT
+         echo "STRG_ACC_NAME=$(terraform output -raw strg-acc-name)" >> $GITHUB_OUTPUT
         working-directory: ./crc-iac-azure-test/
              
         ##Delete Infrastructure on failure
@@ -85,9 +87,10 @@ jobs:
         env:
           RG_NAME: ${{ needs.create-test-infra.outputs.rg_name }}
           APP_NAME: ${{ needs.create-test-infra.outputs.app_name }}
+          STRG_ACC_NAME: ${{ needs.create-test-infra.outputs.strg_acc_name }}
         with:
           inlineScript: |
-             az storage blob upload --account-name $RG_NAME --container-name strg-cont01 --name crc_code_test --file $GITHUB_WORKSPACE/crc-code/crc_code_test.zip --auth-mode login
+             az storage blob upload --account-name $STRG_ACC_NAME --container-name strg-cont01 --name crc_code_test.zip --file $GITHUB_WORKSPACE/crc-code/crc_code_test.zip --auth-mode login
 
 
       - name: Deleting infrastructure on failure
