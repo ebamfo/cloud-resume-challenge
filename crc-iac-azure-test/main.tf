@@ -51,6 +51,9 @@ resource "azurerm_cosmosdb_account" "db-acc" {
   capabilities {
     name = "EnableTable"
   }
+  capabilities {
+    name =  "EnableServerless"
+  }
   depends_on = [
     azurerm_resource_group.crc-test-rg,
   ]
