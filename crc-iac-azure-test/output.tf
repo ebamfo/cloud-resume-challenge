@@ -23,3 +23,8 @@ output "funcapp-publish-profile" {
   description = "Azure Function App publishing profile"
   sensitive = true
 }
+
+output "strg-acc-name" {
+  value = azurerm_storage_account.strg-crc-test.name
+  description = "Storage Account Name"
+}
