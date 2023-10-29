@@ -87,12 +87,7 @@ jobs:
           APP_NAME: ${{ needs.create-test-infra.outputs.app_name }}
         with:
           inlineScript: |
-             az storage blob upload \
-             --account-name $RG_NAME \
-             --container-name strg-cont01 \
-             --name crc_code_test \
-             --file $GITHUB_WORKSPACE/crc-code/crc_code_test.zip \
-             --auth-mode login
+             az storage blob upload --account-name $RG_NAME --container-name strg-cont01 --name crc_code_test --file $GITHUB_WORKSPACE/crc-code/crc_code_test.zip --auth-mode login
 
 
       - name: Deleting infrastructure on failure
@@ -102,7 +97,7 @@ jobs:
         with:
           inlineScript: |
             az group delete -n $RG_NAME -y
-        if: ${{ failure() }}
+        if: ${{ success() }}
       - name: logout
         run: |
             az logout
