@@ -100,7 +100,7 @@ jobs:
         with:
           inlineScript: |
             az group delete -n $RG_NAME -y
-        if: ${{ success() }}
+        if: ${{ failure() }}
       - name: logout
         run: |
             az logout
