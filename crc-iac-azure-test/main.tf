@@ -163,7 +163,7 @@ resource "azurerm_application_insights" "application_insights" {
 
 locals {
   cosmosdb_connection_strings = azurerm_cosmosdb_account.db-acc.connection_strings
-  package_url = join("",[azurerm_storage_account.strg-crc-test.primary_blob_endpoint, azurerm_storage_container.strg-crc-code.name,"/crc_code_test"])
+  package_url = join("",[azurerm_storage_account.strg-crc-test.primary_blob_endpoint, azurerm_storage_container.strg-crc-code.name,"/crc_code_test.zip"])
 }
 
 
