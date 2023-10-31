@@ -78,7 +78,6 @@ jobs:
       - name: installing zip and zipping function
         run: |
               sudo apt-get install zip -y
-              rm -rf .venv .vscode
               zip -rv crc_code_test.zip . 
         working-directory: ./crc-code
 
