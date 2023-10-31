@@ -113,6 +113,8 @@ resource "azurerm_linux_function_app" "funcapp-crc-test-01" {
   app_settings = {
     CosmosDBConnectionString1 = local.cosmosdb_connection_strings[0]
     WEBSITE_RUN_FROM_PACKAGE  = local.package_url
+    SCM_DO_BUILD_DURING_DEPLOYMENT=true
+    ENABLE_ORYX_BUILD=true
   }
 
   site_config {
@@ -120,7 +122,7 @@ resource "azurerm_linux_function_app" "funcapp-crc-test-01" {
     application_insights_key               = azurerm_application_insights.application_insights.instrumentation_key
 
     cors {
-      allowed_origins = ["*"]
+      allowed_origins = ["*","https://portal.azure.com"]
     }
     application_stack {
       python_version = "3.9"
