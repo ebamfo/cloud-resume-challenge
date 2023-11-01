@@ -1,21 +1,24 @@
 import logging
 import os
 import azure.functions as func
+import json
+
 from azure.data.tables import TableClient, UpdateMode
 from azure.core.exceptions import ResourceExistsError, HttpResponseError
-import json
 
 func.HttpResponse.mimetype = 'application/json'
 func.HttpResponse.charset = 'utf-8'
+    
+def main(req: func.HttpRequest) -> func.HttpResponse:
+        
 
-my_entity = {
+        with TableClient.from_connection_string(conn_str=os.environ['CONNECTION_STR'], table_name="ViewsCounter") as table:
+            
+            my_entity = {
             "PartitionKey": "pk-01",
             "RowKey": "rk-01",
             "CurrentCounter": 0
-        }
-    
-def main(req: func.HttpRequest) -> func.HttpResponse:
-        with TableClient.from_connection_string(conn_str=os.environ['CONNECTION_STR'], table_name="ViewsCounter") as table:
+            }
             
             # Create a table in case it does not already exist
             try:

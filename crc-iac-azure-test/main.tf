@@ -111,10 +111,8 @@ resource "azurerm_linux_function_app" "funcapp-crc-test-01" {
   service_plan_id            = azurerm_service_plan.serv_plan-crc-test-01.id
 
   app_settings = {
-    CosmosDBConnectionString1 = local.cosmosdb_connection_strings[0]
-    
-    SCM_DO_BUILD_DURING_DEPLOYMENT=true
-    ENABLE_ORYX_BUILD=true
+    CONNECTION_STR = local.cosmosdb_connection_strings[0]
+    WEBSITE_RUN_FROM_PACKAGE  = local.package_url
   }
 
   site_config {
