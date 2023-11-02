@@ -10,7 +10,7 @@ on:
       - '!crc-iac-azure-test/**'
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'crc-code' # set this to the path to your web app project, defaults to the repository root
   PYTHON_VERSION: '3.9' # set this to the python version to use (supports 3.6, 3.7, 3.8)
 
 jobs:
@@ -63,9 +63,6 @@ jobs:
   deploy-azure-api-merge-request:
     needs: create-test-infra
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./crc-code/
     env:
         RG_NAME: ${{ needs.create-test-infra.outputs.rg_name }}
         APP_NAME: ${{ needs.create-test-infra.outputs.app_name }}
@@ -75,22 +72,39 @@ jobs:
         with:
           creds: ${{ secrets.AZ_CRED }}
       
-      - name: installing zip and zipping function
-        run: |
-              sudo apt-get install zip -y
-              zip -rv crc_code_test.zip . 
-        working-directory: ./crc-code
+      # - name: installing zip and zipping function
+      #   run: |
+      #         sudo apt-get install zip -y
+      #         rm -rf .venv .vscode
+      #         #zip -rv crc_code_test.zip . 
+      #   working-directory: ./crc-code
 
-      - name: deploy zipped file to azure
-        uses: azure/CLI@v1
+      - name: Setup Python ${{ env.PYTHON_VERSION }} Environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+
+      - name: 'Resolve Project Dependencies Using Pip'
+        shell: bash
+        run: |
+            pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt --target=".python_packages/lib/site-packages"
+            popd
+
+      - name: 'Run Azure Functions Action'
+        uses: Azure/functions-action@v1
+        id: fa
         env:
           RG_NAME: ${{ needs.create-test-infra.outputs.rg_name }}
           APP_NAME: ${{ needs.create-test-infra.outputs.app_name }}
-          STRG_ACC_NAME: ${{ needs.create-test-infra.outputs.strg_acc_name }}
         with:
-          inlineScript: |
-             az storage blob upload --account-name $STRG_ACC_NAME --container-name strg-cont01 --name crc_code_test.zip --file $GITHUB_WORKSPACE/crc-code/crc_code_test.zip --auth-mode key
-
+            app-name: ${{ env.RG_NAME }}
+            package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+            respect-funcignore: true
+            scm-do-build-during-deployment: true
+            enable-oryx-build: true
 
       - name: Deleting infrastructure on failure
         uses: azure/CLI@v1
@@ -162,7 +176,6 @@ jobs:
           app-name: 'func-pers-prod-01'
           slot-name: 'production'
           package: './crc_code_test.zip'
-          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
           scm-do-build-during-deployment: true
           enable-oryx-build: true
         
