@@ -113,7 +113,6 @@ resource "azurerm_linux_function_app" "funcapp-crc-test-01" {
   app_settings = {
     CONNECTION_STR = local.cosmosdb_connection_strings[0]
     WEBSITE_RUN_FROM_PACKAGE  = local.package_url
-    SCM_DO_BUILD_DURING_DEPLOYMENT=true
   }
 
   site_config {

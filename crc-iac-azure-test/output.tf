@@ -28,3 +28,9 @@ output "strg-acc-name" {
   value = azurerm_storage_account.strg-crc-test.name
   description = "Storage Account Name"
 }
+
+output "publish-profile" {
+  value = azurerm_linux_function_app.funcapp-crc-test-01.site_credential
+  description = "Function App Publish Profile"
+  sensitive = true
+}

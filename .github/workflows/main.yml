@@ -21,6 +21,7 @@ jobs:
       app_name: ${{ steps.terraform-output.outputs.APP_NAME }}
       api_endpoint: ${{ steps.terraform-output.outputs.API_ENDPOINT }}
       strg_acc_name: ${{ steps.terraform-output.outputs.STRG_ACC_NAME }}
+      publish_profile: ${{ steps.terraform-output.outputs.PUBLISH_PROFILE }}
     steps:
         
       - uses: actions/checkout@v3
@@ -49,8 +50,10 @@ jobs:
          echo "APP_NAME=$(terraform output -raw appname)" >> $GITHUB_OUTPUT
          echo "API_ENDPOINT=$(terraform output -raw api-endpoint)" >> $GITHUB_OUTPUT
          echo "STRG_ACC_NAME=$(terraform output -raw strg-acc-name)" >> $GITHUB_OUTPUT
+         echo "PUBLISH_PROFILE=$(terraform output -raw publish-profile)" >> $GITHUB_OUTPUT
         working-directory: ./crc-iac-azure-test/
-             
+
+      
         ##Delete Infrastructure on failure
       - name: Delete terraform infra on failure
         run: |
@@ -99,10 +102,12 @@ jobs:
         env:
           RG_NAME: ${{ needs.create-test-infra.outputs.rg_name }}
           APP_NAME: ${{ needs.create-test-infra.outputs.app_name }}
+          PUBLISH_PROFILE: ${{ needs.create-test-infra.outputs.publish_profile }}
         with:
             app-name: ${{ env.RG_NAME }}
             package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
             respect-funcignore: true
+            publish-profile: ${{ env.PUBLISH_PROFILE }}
             scm-do-build-during-deployment: true
             enable-oryx-build: true
 
@@ -139,14 +144,14 @@ jobs:
         env:
           CYPRESS_API_ENDPOINT: ${{ needs.create-test-infra.outputs.api_endpoint }}
         
-      # - name: Deleting infrastructure on failure  #Change after testing code##
-      #   uses: azure/CLI@v1
-      #   env:
-      #     RG_NAME: ${{ needs.create-test-infra.outputs.rg_name }}
-      #   with:
-      #     inlineScript: |
-      #       az group delete --name ${{ env.RG_NAME }} -y
-      #   if: ${{ success() }}
+      - name: Deleting infrastructure on failure  #Change after testing code##
+        uses: azure/CLI@v1
+        env:
+           RG_NAME: ${{ needs.create-test-infra.outputs.rg_name }}
+        with:
+           inlineScript: |
+             az group delete --name ${{ env.RG_NAME }} -y
+        if: ${{ success() }}
 
   if_merged:
     if: github.event.pull_request.merged == true
