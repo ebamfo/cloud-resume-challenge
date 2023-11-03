@@ -50,7 +50,7 @@ jobs:
          echo "APP_NAME=$(terraform output -raw appname)" >> $GITHUB_OUTPUT
          echo "API_ENDPOINT=$(terraform output -raw api-endpoint)" >> $GITHUB_OUTPUT
          echo "STRG_ACC_NAME=$(terraform output -raw strg-acc-name)" >> $GITHUB_OUTPUT
-         echo "PUBLISH_PROFILE=$(terraform output -raw publish-profile)" >> $GITHUB_OUTPUT
+         echo "PUBLISH_PROFILE=$(terraform output -json publish-profile)" >> $GITHUB_OUTPUT
         working-directory: ./crc-iac-azure-test/
 
       
