@@ -165,9 +165,9 @@ locals {
   cosmosdb_connection_string = join("",["DefaultEndpointsProtocol=https;AccountName=",
    azurerm_cosmosdb_account.db-acc.name,
   ";AccountKey=", azurerm_cosmosdb_account.db-acc.primary_key,
-   ";TableEndpoint=",
-   azurerm_cosmosdb_account.db-acc.endpoint,
-   ";"])
+   ";TableEndpoint=https://",
+   azurerm_cosmosdb_account.db-acc.name,
+   ".table.cosmos.azure.com:443/;"])
   package_url = join("",[azurerm_storage_account.strg-crc-test.primary_blob_endpoint, azurerm_storage_container.strg-crc-code.name,"/crc_code_test.zip"])
 }
 
