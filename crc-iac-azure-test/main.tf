@@ -111,7 +111,7 @@ resource "azurerm_linux_function_app" "funcapp-crc-test-01" {
   service_plan_id            = azurerm_service_plan.serv_plan-crc-test-01.id
 
   app_settings = {
-    CONNECTION_STR = local.cosmosdb_connection_strings[0]
+    CONNECTION_STR = local.cosmosdb_connection_string
     #WEBSITE_RUN_FROM_PACKAGE  = local.package_url
   }
 
@@ -162,7 +162,12 @@ resource "azurerm_application_insights" "application_insights" {
 
 
 locals {
-  cosmosdb_connection_strings = azurerm_cosmosdb_account.db-acc.connection_strings
+  cosmosdb_connection_string = join("",["DefaultEndpointsProtocol=https;AccountName=",
+   azurerm_cosmosdb_account.db-acc.name,
+  ";AccountKey=", azurerm_cosmosdb_account.db-acc.primary_key,
+   ";TableEndpoint=",
+   azurerm_cosmosdb_account.db-acc.endpoint,
+   ";"])
   package_url = join("",[azurerm_storage_account.strg-crc-test.primary_blob_endpoint, azurerm_storage_container.strg-crc-code.name,"/crc_code_test.zip"])
 }
 
