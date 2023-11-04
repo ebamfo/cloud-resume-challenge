@@ -21,9 +21,7 @@ jobs:
       app_name: ${{ steps.terraform-output.outputs.APP_NAME }}
       api_endpoint: ${{ steps.terraform-output.outputs.API_ENDPOINT }}
       strg_acc_name: ${{ steps.terraform-output.outputs.STRG_ACC_NAME }}
-      publish_profile: ${{ steps.terraform-output.outputs.PUBLISH_PROFILE }}
     steps:
-        
       - uses: actions/checkout@v3
       - uses: azure/login@v1
         with:
@@ -50,11 +48,8 @@ jobs:
          echo "APP_NAME=$(terraform output -raw appname)" >> $GITHUB_OUTPUT
          echo "API_ENDPOINT=$(terraform output -raw api-endpoint)" >> $GITHUB_OUTPUT
          echo "STRG_ACC_NAME=$(terraform output -raw strg-acc-name)" >> $GITHUB_OUTPUT
-         echo "PUBLISH_PROFILE=$(terraform output -json publish-profile)" >> $GITHUB_OUTPUT
-         echo $PUBLISH_PROFILE
         working-directory: ./crc-iac-azure-test/
 
-      
         ##Delete Infrastructure on failure
       - name: Delete terraform infra on failure
         run: |
@@ -67,10 +62,6 @@ jobs:
   deploy-azure-api-merge-request:
     needs: create-test-infra
     runs-on: ubuntu-latest
-    env:
-        RG_NAME: ${{ needs.create-test-infra.outputs.rg_name }}
-        APP_NAME: ${{ needs.create-test-infra.outputs.app_name }}
-        PUBLISH_PROFILE: ${{ needs.create-test-infra.outputs.publish_profile }}
     steps:
       - uses: actions/checkout@v3
       - uses: azure/login@v1
@@ -89,10 +80,26 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
+      - name: Retrieve publish profile for deployment
+        uses: azure/CLI@v1
+        id: publishProfileRetrieval
+        env:
+          RG_NAME: ${{ needs.create-test-infra.outputs.rg_name }}
+          APP_NAME: ${{ needs.create-test-infra.outputs.app_name }}
+        with:
+          inlineScript: |
+            publishProfiles=$(az webapp deployment list-publishing-profiles \
+              --name $APP_NAME \
+              --resource-group $RG_NAME \
+              --subscription ${{ vars.SUBSCRIPTION_ID }} --xml)
+            echo "PUBLISH_PROFILE=$publishProfiles" >> $GITHUB_OUTPUT
+        
+
 
       - name: 'Resolve Project Dependencies Using Pip'
         shell: bash
         run: |
+            echo $PUBLISH_PROFILE
             pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
             python -m pip install --upgrade pip
             pip install -r requirements.txt --target=".python_packages/lib/site-packages"
@@ -104,12 +111,11 @@ jobs:
         env:
           RG_NAME: ${{ needs.create-test-infra.outputs.rg_name }}
           APP_NAME: ${{ needs.create-test-infra.outputs.app_name }}
-          PUBLISH_PROFILE: ${{ needs.create-test-infra.outputs.publish_profile }}
         with:
             app-name: ${{ env.RG_NAME }}
             package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
             respect-funcignore: true
-            publish-profile: ${{ env.PUBLISH_PROFILE }}
+            publish-profile: ${{ steps.publishProfileRetrieval.outputs.PUBLISH_PROFILE }}
             scm-do-build-during-deployment: true
             enable-oryx-build: true
 
