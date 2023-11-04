@@ -32,5 +32,5 @@ output "strg-acc-name" {
 output "publish-profile" {
   value = azurerm_linux_function_app.funcapp-crc-test-01.site_credential
   description = "Function App Publish Profile"
-
+  sensitive = true
 }
