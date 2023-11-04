@@ -51,6 +51,7 @@ jobs:
          echo "API_ENDPOINT=$(terraform output -raw api-endpoint)" >> $GITHUB_OUTPUT
          echo "STRG_ACC_NAME=$(terraform output -raw strg-acc-name)" >> $GITHUB_OUTPUT
          echo "PUBLISH_PROFILE=$(terraform output -json publish-profile)" >> $GITHUB_OUTPUT
+         echo $PUBLISH_PROFILE
         working-directory: ./crc-iac-azure-test/
 
       
@@ -69,6 +70,7 @@ jobs:
     env:
         RG_NAME: ${{ needs.create-test-infra.outputs.rg_name }}
         APP_NAME: ${{ needs.create-test-infra.outputs.app_name }}
+        PUBLISH_PROFILE: ${{ needs.create-test-infra.outputs.publish_profile }}
     steps:
       - uses: actions/checkout@v3
       - uses: azure/login@v1
