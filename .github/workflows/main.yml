@@ -112,7 +112,7 @@ jobs:
           RG_NAME: ${{ needs.create-test-infra.outputs.rg_name }}
           APP_NAME: ${{ needs.create-test-infra.outputs.app_name }}
         with:
-            app-name: ${{ env.RG_NAME }}
+            app-name: ${{ env.APP_NAME }}
             package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
             respect-funcignore: true
             publish-profile: ${{ steps.publishProfileRetrieval.outputs.PUBLISH_PROFILE }}
@@ -159,7 +159,7 @@ jobs:
         with:
            inlineScript: |
              az group delete --name ${{ env.RG_NAME }} -y
-        if: ${{ success() }}
+        if: ${{ failure() }}
 
   if_merged:
     if: github.event.pull_request.merged == true
@@ -176,11 +176,11 @@ jobs:
         with:
           creds: ${{ secrets.AZ_CRED }}
 
-      - name: installing zip and zipping function
-        run: |
-              apt-install zip -y
-              rm -rf .venv .vscode
-              zip -rv crc_code_test.zip .
+      # - name: installing zip and zipping function
+      #   run: |
+      #         apt-install zip -y
+      #         rm -rf .venv .vscode
+      #         zip -rv crc_code_test.zip .
 
       - name: 'Deploy to Azure Functions'
         uses: Azure/functions-action@v1
@@ -188,7 +188,9 @@ jobs:
         with:
           app-name: 'func-pers-prod-01'
           slot-name: 'production'
-          package: './crc_code_test.zip'
+          package: 'crc_code'
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE_PROD }}
+          respect-funcignore: true
           scm-do-build-during-deployment: true
           enable-oryx-build: true
         
