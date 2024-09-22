@@ -161,6 +161,8 @@ resource "azurerm_application_insights" "application_insights" {
 
 
 
+
+
 locals {
   cosmosdb_connection_string = join("",["DefaultEndpointsProtocol=https;AccountName=",
    azurerm_cosmosdb_account.db-acc.name,

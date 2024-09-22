@@ -30,7 +30,7 @@
 		"resource_name": "res-6"
 	},
 	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.KeyVault/vaults/kv-pers-storage-uksouth/certificates/ssl-certificate-1": {
-		"resource_id": "https://kv-pers-storage-uksouth.vault.azure.net/certificates/ssl-certificate-1/ff374b323a6e43f2ab6a2666ee8b5913",
+		"resource_id": "https://kv-pers-storage-uksouth.vault.azure.net/certificates/ssl-certificate-1/bae0ce730b694e33a915db411ac49ae1",
 		"resource_type": "azurerm_key_vault_certificate",
 		"resource_name": "res-7"
 	},
@@ -59,84 +59,99 @@
 		"resource_type": "azurerm_dns_ns_record",
 		"resource_name": "res-12"
 	},
+	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Network/dnszones/ebamforesume.cloud/TXT/_acme-challenge": {
+		"resource_id": "/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Network/dnsZones/ebamforesume.cloud/TXT/_acme-challenge",
+		"resource_type": "azurerm_dns_txt_record",
+		"resource_name": "res-14"
+	},
 	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Network/networkWatchers/NetworkWatcher_uksouth": {
 		"resource_id": "/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Network/networkWatchers/NetworkWatcher_uksouth",
 		"resource_type": "azurerm_network_watcher",
-		"resource_name": "res-14"
+		"resource_name": "res-15"
+	},
+	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Portal/dashboards/9ae60b7c-5010-4f1f-b589-74fb5f3ed027-dashboard": {
+		"resource_id": "/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Portal/dashboards/9ae60b7c-5010-4f1f-b589-74fb5f3ed027-dashboard",
+		"resource_type": "azurerm_portal_dashboard",
+		"resource_name": "res-16"
 	},
 	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Storage/storageAccounts/cloudresumechallenga98f": {
 		"resource_id": "/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Storage/storageAccounts/cloudresumechallenga98f",
 		"resource_type": "azurerm_storage_account",
-		"resource_name": "res-15"
+		"resource_name": "res-17"
 	},
 	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Storage/storageAccounts/cloudresumechallenga98f/blobServices/default/containers/azure-webjobs-hosts": {
 		"resource_id": "https://cloudresumechallenga98f.blob.core.windows.net/azure-webjobs-hosts",
 		"resource_type": "azurerm_storage_container",
-		"resource_name": "res-17"
+		"resource_name": "res-19"
 	},
 	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Storage/storageAccounts/cloudresumechallenga98f/blobServices/default/containers/azure-webjobs-secrets": {
 		"resource_id": "https://cloudresumechallenga98f.blob.core.windows.net/azure-webjobs-secrets",
 		"resource_type": "azurerm_storage_container",
-		"resource_name": "res-18"
+		"resource_name": "res-20"
 	},
 	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Storage/storageAccounts/cloudresumechallenga98f/blobServices/default/containers/scm-releases": {
 		"resource_id": "https://cloudresumechallenga98f.blob.core.windows.net/scm-releases",
 		"resource_type": "azurerm_storage_container",
-		"resource_name": "res-19"
+		"resource_name": "res-21"
 	},
 	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Storage/storageAccounts/cloudresumechallenga98f/fileServices/default/shares/func-pers-prod-01a435": {
 		"resource_id": "https://cloudresumechallenga98f.file.core.windows.net/func-pers-prod-01a435",
 		"resource_type": "azurerm_storage_share",
-		"resource_name": "res-21"
+		"resource_name": "res-23"
 	},
 	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Storage/storageAccounts/ebamfo9": {
 		"resource_id": "/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Storage/storageAccounts/ebamfo9",
 		"resource_type": "azurerm_storage_account",
-		"resource_name": "res-24"
+		"resource_name": "res-26"
 	},
 	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Storage/storageAccounts/ebamfo9/blobServices/default/containers/$web": {
 		"resource_id": "https://ebamfo9.blob.core.windows.net/$web",
 		"resource_type": "azurerm_storage_container",
-		"resource_name": "res-26"
+		"resource_name": "res-28"
+	},
+	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Storage/storageAccounts/ebamfo9/blobServices/default/containers/hello": {
+		"resource_id": "https://ebamfo9.blob.core.windows.net/hello",
+		"resource_type": "azurerm_storage_container",
+		"resource_name": "res-29"
 	},
 	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Web/serverFarms/ASP-cloudresumechallengechunk2-b186": {
 		"resource_id": "/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Web/serverfarms/ASP-cloudresumechallengechunk2-b186",
 		"resource_type": "azurerm_service_plan",
-		"resource_name": "res-30"
+		"resource_name": "res-33"
 	},
 	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Web/sites/func-pers-prod-01": {
 		"resource_id": "/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Web/sites/func-pers-prod-01",
 		"resource_type": "azurerm_linux_function_app",
-		"resource_name": "res-31"
+		"resource_name": "res-34"
 	},
 	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Web/sites/func-pers-prod-01/functions/HttpTrigger3": {
 		"resource_id": "/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Web/sites/func-pers-prod-01/functions/HttpTrigger3",
 		"resource_type": "azurerm_function_app_function",
-		"resource_name": "res-35"
+		"resource_name": "res-38"
 	},
 	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Web/sites/func-pers-prod-01/hostNameBindings/func-pers-prod-01.azurewebsites.net": {
 		"resource_id": "/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Web/sites/func-pers-prod-01/hostNameBindings/func-pers-prod-01.azurewebsites.net",
 		"resource_type": "azurerm_app_service_custom_hostname_binding",
-		"resource_name": "res-36"
+		"resource_name": "res-39"
 	},
 	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/microsoft.cdn/profiles/resume": {
 		"resource_id": "/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Cdn/profiles/resume",
 		"resource_type": "azurerm_cdn_profile",
-		"resource_name": "res-37"
+		"resource_name": "res-40"
 	},
 	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/microsoft.cdn/profiles/resume/endpoints/ebamfo9": {
 		"resource_id": "/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Cdn/profiles/resume/endpoints/ebamfo9",
 		"resource_type": "azurerm_cdn_endpoint",
-		"resource_name": "res-38"
+		"resource_name": "res-41"
 	},
 	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/microsoft.insights/actiongroups/Application Insights Smart Detection": {
 		"resource_id": "/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Insights/actionGroups/Application Insights Smart Detection",
 		"resource_type": "azurerm_monitor_action_group",
-		"resource_name": "res-39"
+		"resource_name": "res-42"
 	},
 	"/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/microsoft.insights/components/func-pers-prod-01": {
 		"resource_id": "/subscriptions/4885c523-a01c-418f-941b-cab57419ea27/resourceGroups/cloud-resume-challenge-chunk-1/providers/Microsoft.Insights/components/func-pers-prod-01",
 		"resource_type": "azurerm_application_insights",
-		"resource_name": "res-40"
+		"resource_name": "res-43"
 	}
 }
