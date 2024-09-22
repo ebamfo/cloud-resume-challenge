@@ -6,8 +6,8 @@ on:
     ##Pull request with changes to crc-code directory only
     paths:
       - 'python-api/**'
-      - '!crc-iac-azure/**'
-      - '!crc-iac-azure-test/**'
+      - '!infra-prod/**'
+      - '!infra-staging/**'
 
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'python-api' # set this to the path to your web app project, defaults to the repository root
@@ -35,11 +35,11 @@ jobs:
         ##Intialise, format code and deploy terraform infra
       - name: Terraform init
         run: terraform init -upgrade
-        working-directory: ./crc-iac-azure-test/
+        working-directory: ./infra-staging/
 
       - name: Terraform apply
         run: terraform apply -auto-approve
-        working-directory: ./crc-iac-azure-test/
+        working-directory: ./infra-staging/
            
       - name: Terraform Outputs
         id: terraform-output
@@ -48,13 +48,13 @@ jobs:
          echo "APP_NAME=$(terraform output -raw appname)" >> $GITHUB_OUTPUT
          echo "API_ENDPOINT=$(terraform output -raw api-endpoint)" >> $GITHUB_OUTPUT
          echo "STRG_ACC_NAME=$(terraform output -raw strg-acc-name)" >> $GITHUB_OUTPUT
-        working-directory: ./crc-iac-azure-test/
+        working-directory: ./infra-staging/
 
         ##Delete Infrastructure on failure
       - name: Delete terraform infra on failure
         run: |
              terraform destroy -auto-approve
-        working-directory: ./crc-iac-azure-test/
+        working-directory: ./infra-staging/
         if: ${{ failure() }}
         
 
