@@ -5,12 +5,12 @@ on:
       - main
     ##Pull request with changes to crc-code directory only
     paths:
-      - 'crc-code/**'
+      - 'python-api/**'
       - '!crc-iac-azure/**'
       - '!crc-iac-azure-test/**'
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'crc-code' # set this to the path to your web app project, defaults to the repository root
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'python-api' # set this to the path to your web app project, defaults to the repository root
   PYTHON_VERSION: '3.9' # set this to the python version to use (supports 3.6, 3.7, 3.8)
 
 jobs:

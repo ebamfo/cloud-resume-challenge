@@ -4,7 +4,7 @@ on:
     push:
         branches: [ main ]
         paths: 
-          - frontend
+          - frontend/**
 
 
 jobs:
@@ -14,7 +14,7 @@ jobs:
     - uses: actions/checkout@v3
     - uses: azure/login@v1
       with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: ${{ secrets.AZ_CRED }}
       #Remove README, .git and .github file before uploading content to azure blob
     - name: Remove README.md .git and .github file
       run: rm -rf README.md .git*
