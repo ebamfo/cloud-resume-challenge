@@ -347,7 +347,7 @@ resource "azurerm_monitor_metric_alert" "alert-grp" {
   name                = "Count-alert"
   resource_group_name = azurerm_resource_group.res-0.name
   scopes              = [azurerm_application_insights.res-43.id]
-  description         = "Action will be triggered when Failure count is greater than 5."
+  description         = "Action will be triggered when requests are greater than 50 over a 5 minutes span."
   severity = 0
 
   
@@ -357,6 +357,13 @@ resource "azurerm_monitor_metric_alert" "alert-grp" {
     aggregation = "Total"
     operator = "GreaterThan"
     threshold = 50
+  }
+  criteria {
+    metric_namespace = "azure.applicationinsights"
+    metric_name = "Failed Requests"
+    aggregation = "Total"
+    operator = "GreaterThan"
+    threshold = 10
   }
 
 
