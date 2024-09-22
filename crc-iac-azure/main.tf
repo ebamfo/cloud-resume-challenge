@@ -7,7 +7,7 @@ resource "azurerm_cdn_endpoint_custom_domain" "res-1" {
   host_name       = "ebamforesume.cloud"
   name            = "ebamforesume-cloud"
   user_managed_https {
-    key_vault_certificate_id = "https://kv-pers-storage-uksouth.vault.azure.net/certificates/ssl-certificate-1"
+    key_vault_secret_id = "https://kv-pers-storage-uksouth.vault.azure.net/certificates/ssl-certificate-1"
   }
   depends_on = [
     azurerm_cdn_endpoint.res-41,

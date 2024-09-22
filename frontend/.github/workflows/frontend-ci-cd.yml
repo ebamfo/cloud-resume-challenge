@@ -1,0 +1,36 @@
+name: Blob storage website CI
+
+on:
+    push:
+        branches: [ main ]
+        paths: 
+          - frontend
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: azure/login@v1
+      with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      #Remove README, .git and .github file before uploading content to azure blob
+    - name: Remove README.md .git and .github file
+      run: rm -rf README.md .git*
+      working-directory: ./frontend/
+    - name: Upload to blob storage
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+            az storage blob upload-batch --account-name ebamfo9 --overwrite true --auth-mode key -d '$web' -s ./frontend
+    - name: Purge CDN endpoint
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+           az cdn endpoint purge --content-paths  "/*" --profile-name "resume" --name "ebamfo9" --resource-group "cloud-resume-challenge-chunk-1"
+    # Azure logout
+    - name: logout
+      run: |
+            az logout
+      if: always()
